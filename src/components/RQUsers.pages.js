@@ -6,7 +6,16 @@ const fetchUser = () => {
 };
 
 export const RQUsers = () => {
-    const { isLoading, data, isError, error } = useQuery("getUsers", fetchUser);
+    const { isLoading, data, isError, error, isFetching } = useQuery(
+        "getUsers",
+        fetchUser,
+        {
+            cacheTime: 10000, //query cache default is 5 mins
+            staleTime: 30000
+        }
+    );
+
+    console.log({ isLoading, isFetching });
 
     if (isLoading) {
         return <h2>Loading...</h2>;

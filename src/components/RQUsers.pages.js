@@ -6,12 +6,29 @@ const fetchUser = () => {
 };
 
 export const RQUsers = () => {
-    const { isLoading, data, isError, error, isFetching } = useQuery(
+
+    const onSuccess = () => {
+        console.log("On Success")
+    };
+    const onError = () => {
+        console.log("On Error")
+    };
+
+    const { isLoading, data, isError, error, isFetching, refetch } = useQuery(
         "getUsers",
         fetchUser,
         {
-            cacheTime: 10000, //query cache default is 5 mins
-            staleTime: 30000
+            enabled: false, // disable fetching on mount
+            refetchOnMount: false, // always
+            refetchOnWindowFocus: true, // always,
+            refetchInterval: 10000, // every 2 seconds
+            refetchIntervalInBackground: true, //continue pulling data even browser not in focus
+            onSuccess,
+            onError,
+            select: (data) => {
+                const userNames = data.data.map(user => user.name) 
+                return userNames
+            }
         }
     );
 
@@ -27,9 +44,13 @@ export const RQUsers = () => {
     return (
         <>
             <h2>RQ Users</h2>
-            {data?.data?.map((user) => (
-                <div key={user.id}>{user.name}</div>
+            <button onClick={refetch}>Fetch Users</button>
+            {data.map((userNames) => (
+                <div key={userNames}>{userNames}</div>
             ))}
+            {/* {data?.data?.map((user) => (
+                <div key={user.id}>{user.name}</div>
+            ))} */}
         </>
     );
 };

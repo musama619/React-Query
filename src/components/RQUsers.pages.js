@@ -1,34 +1,25 @@
 import { useQuery } from "react-query";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const fetchUser = () => {
     return axios.get("http://localhost:4000/users");
 };
 
 export const RQUsers = () => {
-
     const onSuccess = () => {
-        console.log("On Success")
+        console.log("On Success");
     };
     const onError = () => {
-        console.log("On Error")
+        console.log("On Error");
     };
 
     const { isLoading, data, isError, error, isFetching, refetch } = useQuery(
         "getUsers",
         fetchUser,
         {
-            enabled: false, // disable fetching on mount
-            refetchOnMount: false, // always
-            refetchOnWindowFocus: true, // always,
-            refetchInterval: 10000, // every 2 seconds
-            refetchIntervalInBackground: true, //continue pulling data even browser not in focus
             onSuccess,
             onError,
-            select: (data) => {
-                const userNames = data.data.map(user => user.name) 
-                return userNames
-            }
         }
     );
 
@@ -45,12 +36,11 @@ export const RQUsers = () => {
         <>
             <h2>RQ Users</h2>
             <button onClick={refetch}>Fetch Users</button>
-            {data.map((userNames) => (
-                <div key={userNames}>{userNames}</div>
+            {data?.data?.map((user) => (
+                <div key={user.id}>
+                    <Link to={`/user/${user.id}`}>{user.name}</Link>
+                </div>
             ))}
-            {/* {data?.data?.map((user) => (
-                <div key={user.id}>{user.name}</div>
-            ))} */}
         </>
     );
 };

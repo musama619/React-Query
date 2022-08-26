@@ -7,6 +7,7 @@ import { Home } from "./components/Home.pages";
 import { RQUsers } from "./components/RQUsers.pages";
 import { User } from "./components/User.page";
 import { DynamicParallelQueries } from "./components/DynamicParallelQueries.page";
+import { PaginatedQueriesPage } from "./components/PaginatedQueries.page";
 
 const queryClient = new QueryClient();
 function App() {
@@ -22,7 +23,7 @@ function App() {
                             <Link to="/rq-users">RQUsers</Link>
                         </li>
                         <li>
-                            <Link to="/user">User</Link>
+                            <Link to="/pagination">Pagination</Link>
                         </li>
                     </ul>
                 </nav>
@@ -35,6 +36,7 @@ function App() {
                         path="/dynamic-users"
                         element={<DynamicParallelQueries userIds={[1, 3]} />}
                     />
+                    <Route path="/pagination" element={<PaginatedQueriesPage />} />
                 </Routes>
             </BrowserRouter>
             <ReactQueryDevtools position="bottom-right" />
